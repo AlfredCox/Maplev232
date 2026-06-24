@@ -98,6 +98,9 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import net.swordie.orm.dao.DonationDao;
+import net.swordie.webapi.donation.Donation; //donation NPC
+import net.swordie.orm.dao.UserDao; //donation NPC
 
 import static net.swordie.ms.client.character.skills.temp.CharacterTemporaryStat.PapulatusTimeLock;
 import static net.swordie.ms.client.character.skills.temp.CharacterTemporaryStat.RideVehicle;
@@ -3830,6 +3833,24 @@ public class ScriptManagerImpl implements ScriptManager {
 
     public void addDailyEntry(DailyEntry de){
         getChr().getAccount().addDailyEntry(de);
+    }
+    @Override
+    public boolean claimDonation(String uuid) {  //Donation NPC
+        DonationDao donationDao = new DonationDao();
+        UserDao userDao = new UserDao();
+
+        Donation donation = donationDao.getByUuid(uuid);
+
+        if (donation == null || donation.isClaimed()) {
+            return false;
+        }
+
+        getChr().getUser().claimDonation(donation);
+
+        donationDao.saveOrUpdate(donation);
+        userDao.saveProperties(getChr().getUser());
+
+        return true;
     }
 
     public void reduceDailyEntry(DailyEntry de){

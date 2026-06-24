@@ -9,7 +9,7 @@ import java.sql.SQLException;
 public class DonationDao implements SworDao<Donation> {
 
     public Donation getByUuid(String uuid) {
-        var objs = DatabaseManager.executeSelect(this, "SELECT * FROM donations d WHERE d.id = ?", "d", uuid);
+        var objs = DatabaseManager.executeSelect(this, "SELECT * FROM donations d WHERE d.uuid = ?", "d", uuid);
         if (objs.size() > 0) {
             return (Donation) objs.get(0);
         }
@@ -62,7 +62,7 @@ public class DonationDao implements SworDao<Donation> {
                     " WHERE ID = ?";
         }
         long id = DatabaseManager.executeQuery(query,
-                donation.getUuid(),
+                //donation.getUuid(), //Donation NPC
                 donation.isClaimed(),
                 donation.getClaimedUserId(),
                 donation.getDonationAmount(),

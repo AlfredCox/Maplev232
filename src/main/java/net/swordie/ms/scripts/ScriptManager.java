@@ -249,7 +249,7 @@ public interface ScriptManager {
 	 */
 	void dispose();
 
-
+	boolean claimDonation(String uuid);//Donation NPC
 
 	// Character Stat-related methods ----------------------------------------------------------------------------------
 
